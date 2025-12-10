@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lib'Row - Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 700px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .left-side {
+            flex: 1;
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-side {
+            flex: 1;
+            padding: 60px 40px;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            margin-right: 15px;
+            color: #4ecdc4;
+        }
+
+        .welcome-text {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .benefits {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .benefits li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .benefits i {
+            margin-right: 10px;
+            color: #4ecdc4;
+            font-size: 18px;
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e6ef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .file-upload {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: block;
+            padding: 14px 16px;
+            border: 2px dashed #e0e6ef;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #64748b;
+        }
+
+        .file-label:hover {
+            border-color: #4ecdc4;
+            background-color: rgba(78, 205, 196, 0.05);
+        }
+
+        .file-label i {
+            margin-right: 8px;
+            color: #4ecdc4;
+        }
+
+        .file-name {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .note {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #666;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .note i {
+            color: #4ecdc4;
+            margin-right: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4ecdc4, #3db8af);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 25px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #3db8af, #2ca59c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .login-link a {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .strength-weak {
+            color: #f44336;
+        }
+
+        .strength-medium {
+            color: #ff9800;
+        }
+
+        .strength-strong {
+            color: #4caf50;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .signup-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .left-side {
+                padding: 40px 30px;
+            }
+            
+            .right-side {
+                padding: 40px 30px;
+                max-height: none;
+            }
+            
+            .logo {
+                font-size: 32px;
+            }
+            
+            .welcome-text {
+                font-size: 24px;
+            }
+            
+            .form-title {
+                font-size: 28px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                border-radius: 15px;
+            }
+            
+            .left-side, .right-side {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .welcome-text {
+                font-size: 22px;
+            }
+            
+            .form-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <!-- Left Side: Welcome Message -->
+        <div class="left-side">
+            <div class="logo">
+                <i class="fas fa-book-open"></i> Lib'Row
+            </div>
+            <h1 class="welcome-text">Join Lib'Row Today!</h1>
+            <p class="description">
+                Create your account to borrow books, manage your reading list, and access thousands of resources from our library.
+            </p>
+            <ul class="benefits">
+                <li><i class="fas fa-check-circle"></i> Borrow up to 5 books at a time</li>
+                <li><i class="fas fa-check-circle"></i> Reserve books in advance</li>
+                <li><i class="fas fa-check-circle"></i> Track your reading history</li>
+                <li><i class="fas fa-check-circle"></i> Get personalized recommendations</li>
+                <li><i class="fas fa-check-circle"></i> Access exclusive online resources</li>
+            </ul>
+        </div>
+
+        <!-- Right Side: Signup Form -->
+        <div class="right-side">
+            <h2 class="form-title">Sign-up</h2>
+            
+            <div id="successMessage" class="success-message"></div>
+            <div id="errorMessage" class="error-message"></div>
+            
+            <form id="signupForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="username" placeholder="Your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ID Number</label>
+                        <input type="text" class="form-input" id="idNumber" placeholder="123456789" required maxlength="9">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="email" placeholder="your.email@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="password" placeholder="Password" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm password" required>
+                        <button type="button" class="toggle-password" id="toggleConfirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Upload ID Picture</label>
+                    <div class="file-upload">
+                        <input type="file" class="file-input" id="idPicture" accept="image/*">
+                        <label for="idPicture" class="file-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose File
+                        </label>
+                        <div class="file-name" id="fileName">No file chosen</div>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Please note:</strong> Your account will be verified by our administrators. Please wait at least 24hrs to validate your account. You will receive an email notification once your account is activated.
+                </div>
+                
+                <button type="submit" class="submit-btn">Sign up</button>
+            </form>
+            
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('confirmPassword');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // File upload display
+        document.getElementById('idPicture').addEventListener('change', function(e) {
+            const fileName = document.getElementById('fileName');
+            if (this.files.length > 0) {
+                fileName.textContent = this.files[0].name;
+            } else {
+                fileName.textContent = 'No file chosen';
+            }
+        });
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthDiv.textContent = '';
+                return;
+            }
+            
+            let strength = 0;
+            let text = '';
+            let className = '';
+            
+            // Check password strength
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            if (strength < 2) {
+                text = 'Weak password';
+                className = 'strength-weak';
+            } else if (strength < 4) {
+                text = 'Medium password';
+                className = 'strength-medium';
+            } else {
+                text = 'Strong password';
+                className = 'strength-strong';
+            }
+            
+            strengthDiv.textContent = text;
+            strengthDiv.className = `password-strength ${className}`;
+        });
+
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function showErrorMessage(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Handle form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            const idPicture = document.getElementById('idPicture').files[0];
+            
+            // Validation
+            if (!username || !idNumber || !email || !password || !confirmPassword) {
+                showErrorMessage('Please fill in all required fields.');
+                return;
+            }
+            
+            if (idNumber.length !== 9) {
+                showErrorMessage('ID Number must be exactly 9 digits.');
+                return;
+            }
+            
+            if (!/^\d+$/.test(idNumber)) {
+                showErrorMessage('ID Number must contain only numbers.');
+                return;
+            }
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showErrorMessage('Please enter a valid email address.');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showErrorMessage('Password must be at least 8 characters long.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showErrorMessage('Passwords do not match.');
+                return;
+            }
+            
+            if (!idPicture) {
+                showErrorMessage('Please upload your ID picture.');
+                return;
+            }
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('librow_users')) || [];
+            const existingUser = users.find(u => u.idNumber === idNumber || u.email === email);
+            
+            if (existingUser) {
+                showErrorMessage('An account with this ID Number or Email already exists.');
+                return;
+            }
+            
+            // Create new user object
+            const newUser = {
+                username,
+                idNumber,
+                email,
+                password,
+                createdAt: new Date().toISOString(),
+                status: 'pending',
+                idPicture: idPicture ? idPicture.name : null
+            };
+            
+            // Add to users array
+            users.push(newUser);
+            
+            // Save to localStorage
+            localStorage.setItem('librow_users', JSON.stringify(users));
+            
+            // Show success message
+            showSuccessMessage('Account created successfully! Your account is pending verification. Please wait at least 24 hours for validation. Redirecting to login...');
+            
+            // Clear form
+            document.getElementById('signupForm').reset();
+            document.getElementById('fileName').textContent = 'No file chosen';
+            document.getElementById('passwordStrength').textContent = '';
+            
+            // Redirect to login after 3 seconds
+            setTimeout(() => {
+                window.location.href = 'login.html?signup=success';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

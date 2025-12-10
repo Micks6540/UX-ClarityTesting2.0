@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrow History - Lib'Row</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            margin-right: 12px;
+            color: #4ecdc4;
+        }
+
+        .back-btn {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Page Title */
+        .page-header {
+            margin: 40px 0 30px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .total-records {
+            border-top: 5px solid #4ecdc4;
+        }
+
+        .currently-borrowed {
+            border-top: 5px solid #3498db;
+        }
+
+        .returned {
+            border-top: 5px solid #2ecc71;
+        }
+
+        /* Divider */
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4ecdc4, transparent);
+            margin: 40px 0;
+        }
+
+        /* History Section */
+        .history-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4ecdc4;
+        }
+
+        /* Table Styles */
+        .table-container {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .history-table thead {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        .history-table th {
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 16px;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .history-table th:last-child {
+            border-right: none;
+        }
+
+        .history-table tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+
+        .history-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .history-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .history-table td {
+            padding: 18px 20px;
+            color: #555;
+        }
+
+        .history-table td:first-child {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .status-borrowed {
+            background-color: #4ecdc4;
+            color: white;
+        }
+
+        .status-returned {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .status-overdue {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .status-pending {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .filters-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e0e6ef;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+
+        .apply-filters {
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .apply-filters:hover {
+            background-color: #3db8af;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination-btn {
+            background-color: white;
+            border: 2px solid #e0e6ef;
+            color: #2c3e50;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            background-color: #4ecdc4;
+            color: white;
+            border-color: #4ecdc4;
+        }
+
+        .pagination-btn.active {
+            background-color: #4ecdc4;
+            color: white;
+            border-color: #4ecdc4;
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.disabled:hover {
+            background-color: white;
+            color: #2c3e50;
+            border-color: #e0e6ef;
+        }
+
+        /* Export Button */
+        .export-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .export-btn {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .export-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+        }
+
+        .footer-content p {
+            margin: 5px 0;
+            color: #cbd5e1;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .history-table {
+                min-width: 700px;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-select {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .stat-number {
+                font-size: 40px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .history-table th,
+            .history-table td {
+                padding: 15px;
+                font-size: 14px;
+            }
+            
+            .status-badge {
+                min-width: 80px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+            }
+            
+            .filters-section {
+                padding: 20px;
+            }
+            
+            .export-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i> Lib'Row
+                </div>
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-history"></i> Borrow History
+            </h1>
+            <p class="page-subtitle">Review your current and past borrowed books</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card total-records">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Total Records</div>
+            </div>
+            
+            <div class="stat-card currently-borrowed">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Currently Borrowed</div>
+            </div>
+            
+            <div class="stat-card returned">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Returned</div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+            <h3 class="filters-title">
+                <i class="fas fa-filter"></i> Filter Records
+            </h3>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <span class="filter-label">Status:</span>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="borrowed">Borrowed</option>
+                        <option value="returned">Returned</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <span class="filter-label">Period:</span>
+                    <select class="filter-select" id="periodFilter">
+                        <option value="all">All Time</option>
+                        <option value="month">This Month</option>
+                        <option value="3months">Last 3 Months</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+                
+                <button class="apply-filters" onclick="applyFilters()">
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section">
+            <h2 class="section-title">Recent Borrow Records</h2>
+            
+            <div class="table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Borrow ID</th>
+                            <th>Book Title</th>
+                            <th>Date Borrowed</th>
+                            <th>Date Due</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr>
+                            <td>14</td>
+                            <td>The Girl with the Dragon Tattoo by Stieg Larsson</td>
+                            <td>2025-12-05</td>
+                            <td>2026-01-02</td>
+                            <td>
+                                <span class="status-badge status-borrowed">BORROWED</span>
+                            </td>
+                        </tr>
+                        
+                        <!-- Row 2 -->
+                        <tr>
+                            <td>13</td>
+                            <td>The Girl with the Dragon Tattoo by Stieg Larsson</td>
+                            <td>2025-12-05</td>
+                            <td>2026-01-02</td>
+                            <td>
+                                <span class="status-badge status-borrowed">BORROWED</span>
+                            </td>
+                        </tr>
+                        
+                        <!-- Row 3 -->
+                        <tr>
+                            <td>12</td>
+                            <td>The Hobbit by J.R.R. Tolkien</td>
+                            <td>2025-12-05</td>
+                            <td>2025-12-26</td>
+                            <td>
+                                <span class="status-badge status-borrowed">BORROWED</span>
+                            </td>
+                        </tr>
+                        
+                        <!-- Row 4 -->
+                        <tr>
+                            <td>11</td>
+                            <td>Brave New World by Aldous Huxley</td>
+                            <td>2025-12-05</td>
+                            <td>2025-12-19</td>
+                            <td>
+                                <span class="status-badge status-borrowed">BORROWED</span>
+                            </td>
+                        </tr>
+                        
+                        <!-- Row 5 -->
+                        <tr>
+                            <td>10</td>
+                            <td>Pride and Prejudice by Jane Austen</td>
+                            <td>2025-12-05</td>
+                            <td>2025-12-12</td>
+                            <td>
+                                <span class="status-badge status-returned">RETURNED</span>
+                            </td>
+                        </tr>
+                        
+                        <!-- Row 6 -->
+                        <tr>
+                            <td>9</td>
+                            <td>The Great Gatsby by F. Scott Fitzgerald</td>
+                            <td>2025-12-05</td>
+                            <td>2025-12-12</td>
+                            <td>
+                                <span class="status-badge status-borrowed">BORROWED</span>
+                            </td>
+                        </tr>
+                        
+                        <!-- Additional Older Records (hidden by default) -->
+                        <tr class="older-record">
+                            <td>8</td>
+                            <td>1984 by George Orwell</td>
+                            <td>2025-11-20</td>
+                            <td>2025-12-04</td>
+                            <td>
+                                <span class="status-badge status-returned">RETURNED</span>
+                            </td>
+                        </tr>
+                        
+                        <tr class="older-record">
+                            <td>7</td>
+                            <td>To Kill a Mockingbird by Harper Lee</td>
+                            <td>2025-11-15</td>
+                            <td>2025-11-29</td>
+                            <td>
+                                <span class="status-badge status-returned">RETURNED</span>
+                            </td>
+                        </tr>
+                        
+                        <tr class="older-record">
+                            <td>6</td>
+                            <td>The Catcher in the Rye by J.D. Salinger</td>
+                            <td>2025-11-10</td>
+                            <td>2025-11-24</td>
+                            <td>
+                                <span class="status-badge status-returned">RETURNED</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn disabled">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Export Button -->
+        <div class="export-section">
+            <button class="export-btn" onclick="exportHistory()">
+                <i class="fas fa-file-export"></i> Export Borrow History
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>Lib'Row - Student Book Borrowing System</p>
+            <p>© 2024 All Rights Reserved | Borrow History</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Navigation functions
+        function goBack() {
+            window.history.back();
+        }
+
+        function goToHome() {
+            window.location.href = "index.html";
+        }
+
+        // Filter functionality
+        function applyFilters() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const periodFilter = document.getElementById('periodFilter').value;
+            
+            // Get all table rows (excluding header)
+            const rows = document.querySelectorAll('.history-table tbody tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                let showRow = true;
+                
+                // Filter by status
+                if (statusFilter !== 'all') {
+                    const statusBadge = row.querySelector('.status-badge');
+                    const statusText = statusBadge.textContent.toLowerCase();
+                    
+                    if (!statusText.includes(statusFilter)) {
+                        showRow = false;
+                    }
+                }
+                
+                // Filter by period (simplified for demo)
+                if (periodFilter !== 'all' && showRow) {
+                    const dateCell = row.cells[2]; // Date Borrowed column
+                    const borrowDate = new Date(dateCell.textContent);
+                    const now = new Date();
+                    
+                    switch(periodFilter) {
+                        case 'month':
+                            // Check if within last 30 days
+                            const monthAgo = new Date();
+                            monthAgo.setDate(monthAgo.getDate() - 30);
+                            if (borrowDate < monthAgo) showRow = false;
+                            break;
+                        case '3months':
+                            // Check if within last 90 days
+                            const threeMonthsAgo = new Date();
+                            threeMonthsAgo.setDate(threeMonthsAgo.getDate() - 90);
+                            if (borrowDate < threeMonthsAgo) showRow = false;
+                            break;
+                        case 'year':
+                            // Check if within last 365 days
+                            const yearAgo = new Date();
+                            yearAgo.setDate(yearAgo.getDate() - 365);
+                            if (borrowDate < yearAgo) showRow = false;
+                            break;
+                    }
+                }
+                
+                // Show/hide row
+                row.style.display = showRow ? '' : 'none';
+                if (showRow) visibleCount++;
+            });
+            
+            // Show message if no results
+            if (visibleCount === 0) {
+                alert('No records found matching your filters. Try different filter options.');
+            } else {
+                // Update stats based on filtered results
+                updateFilteredStats();
+            }
+        }
+
+        // Update stats based on filtered results
+        function updateFilteredStats() {
+            const rows = document.querySelectorAll('.history-table tbody tr');
+            let total = 0;
+            let borrowed = 0;
+            let returned = 0;
+            
+            rows.forEach(row => {
+                if (row.style.display !== 'none') {
+                    total++;
+                    const statusBadge = row.querySelector('.status-badge');
+                    const statusText = statusBadge.textContent;
+                    
+                    if (statusText === 'BORROWED') {
+                        borrowed++;
+                    } else if (statusText === 'RETURNED') {
+                        returned++;
+                    }
+                }
+            });
+            
+            // Update stat cards
+            document.querySelector('.total-records .stat-number').textContent = total;
+            document.querySelector('.currently-borrowed .stat-number').textContent = borrowed;
+            document.querySelector('.returned .stat-number').textContent = returned;
+        }
+
+        // Export history function
+        function exportHistory() {
+            alert('Exporting borrow history...\n\nThis would generate a PDF/CSV file with all your borrowing records.\n\nFile would include:\n• All borrow records\n• Dates and status\n• Book titles and authors\n• Export timestamp\n\n(Feature simulated for demo)');
+            
+            // Simulate download
+            const exportBtn = document.querySelector('.export-btn');
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+            exportBtn.disabled = true;
+            
+            setTimeout(() => {
+                exportBtn.innerHTML = '<i class="fas fa-check"></i> Export Complete';
+                setTimeout(() => {
+                    exportBtn.innerHTML = originalText;
+                    exportBtn.disabled = false;
+                }, 2000);
+            }, 1500);
+        }
+
+        // Pagination functionality
+        function initPagination() {
+            const paginationBtns = document.querySelectorAll('.pagination-btn:not(.disabled)');
+            paginationBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!this.classList.contains('active')) {
+                        // Remove active class from all buttons
+                        document.querySelectorAll('.pagination-btn').forEach(b => {
+                            b.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked button
+                        this.classList.add('active');
+                        
+                        // Show loading state
+                        const tableContainer = document.querySelector('.table-container');
+                        tableContainer.style.opacity = '0.7';
+                        
+                        // Simulate page load
+                        setTimeout(() => {
+                            tableContainer.style.opacity = '1';
+                            alert('Loading page ' + this.textContent + '...\n\n(In a real system, this would load more records from the server.)');
+                        }, 300);
+                    }
+                });
+            });
+        }
+
+        // Show/hide older records
+        function toggleOlderRecords() {
+            const olderRecords = document.querySelectorAll('.older-record');
+            olderRecords.forEach(record => {
+                record.style.display = record.style.display === 'none' ? '' : 'none';
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize pagination
+            initPagination();
+            
+            // Add hover effects to table rows
+            const tableRows = document.querySelectorAll('.history-table tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+                
+                // Add click to show details
+                row.addEventListener('click', function() {
+                    const bookTitle = this.cells[1].textContent;
+                    const status = this.cells[4].querySelector('.status-badge').textContent;
+                    const borrowId = this.cells[0].textContent;
+                    
+                    alert(`Borrow Record Details:\n\n` +
+                          `ID: ${borrowId}\n` +
+                          `Book: ${bookTitle}\n` +
+                          `Borrowed: ${this.cells[2].textContent}\n` +
+                          `Due: ${this.cells[3].textContent}\n` +
+                          `Status: ${status}\n\n` +
+                          `(Click "Mark as Returned" in Manage Borrows to update status)`);
+                });
+            });
+            
+            // Add animation to stat cards
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.style.animationDelay = (index * 0.1) + 's';
+                card.style.animation = 'fadeInUp 0.5s ease-out';
+            });
+        });
+    </script>
+</body>
+</html>

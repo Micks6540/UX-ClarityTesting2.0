@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lib'Row - Sign In</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            min-height: 600px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .left-side {
+            flex: 1;
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-side {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            margin-right: 15px;
+            color: #4ecdc4;
+        }
+
+        .welcome-text {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .features {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .features i {
+            margin-right: 10px;
+            color: #4ecdc4;
+            font-size: 18px;
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e6ef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 25px;
+        }
+
+        .forgot-password a {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4ecdc4, #3db8af);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 25px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #3db8af, #2ca59c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .signup-link {
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .signup-link a {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .left-side {
+                padding: 40px 30px;
+            }
+            
+            .right-side {
+                padding: 40px 30px;
+            }
+            
+            .logo {
+                font-size: 32px;
+            }
+            
+            .welcome-text {
+                font-size: 24px;
+            }
+            
+            .form-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                border-radius: 15px;
+            }
+            
+            .left-side, .right-side {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .welcome-text {
+                font-size: 22px;
+            }
+            
+            .form-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Side: Welcome Message -->
+        <div class="left-side">
+            <div class="logo">
+                <i class="fas fa-book-open"></i> Lib'Row
+            </div>
+            <h1 class="welcome-text">Welcome Back!</h1>
+            <p class="description">
+                Sign in to access your personal library, manage your borrowings, and explore thousands of books available for you.
+            </p>
+            <ul class="features">
+                <li><i class="fas fa-check-circle"></i> Access your borrowing history</li>
+                <li><i class="fas fa-check-circle"></i> Manage current borrowings</li>
+                <li><i class="fas fa-check-circle"></i> Get personalized recommendations</li>
+                <li><i class="fas fa-check-circle"></i> Reserve books in advance</li>
+            </ul>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="right-side">
+            <h2 class="form-title">Sign-in</h2>
+            
+            <div id="successMessage" class="success-message"></div>
+            <div id="errorMessage" class="error-message"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">ID Number</label>
+                    <input type="text" class="form-input" id="idNumber" placeholder="123456789" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="password" placeholder="Password" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="submit-btn">Sign in</button>
+            </form>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Check for success message from signup
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('signup') === 'success') {
+                showSuccessMessage('Account created successfully! Please sign in.');
+            }
+        });
+
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showErrorMessage(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // Simple validation
+            if (!idNumber || !password) {
+                showErrorMessage('Please fill in all fields.');
+                return;
+            }
+            
+            if (idNumber.length !== 9) {
+                showErrorMessage('ID Number must be 9 digits.');
+                return;
+            }
+            
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('librow_users')) || [];
+            const user = users.find(u => u.idNumber === idNumber && u.password === password);
+            
+            if (user) {
+                // Store current user in localStorage
+                localStorage.setItem('librow_current_user', JSON.stringify(user));
+                
+                // Show success message
+                showSuccessMessage('Login successful! Redirecting...');
+                
+                // Redirect to main page after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showErrorMessage('Invalid ID Number or password.');
+            }
+        });
+
+        function forgotPassword() {
+            const idNumber = prompt('Enter your ID Number to reset password:');
+            if (idNumber) {
+                alert(`Password reset instructions have been sent to the email associated with ID: ${idNumber}\n\n(For demo purposes only)`);
+            }
+        }
+    </script>
+</body>
+</html>

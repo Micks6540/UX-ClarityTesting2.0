@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Lib'Row</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            margin-right: 12px;
+            color: #4ecdc4;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .cart-icon-header {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff6b6b;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin: 40px 0 30px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-summary {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .item-count {
+            background-color: #4ecdc4;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .search-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e0e6ef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+
+        /* Cart Items Section */
+        .cart-section {
+            margin-bottom: 40px;
+        }
+
+        .cart-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4ecdc4;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-item {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .unavailable-item {
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .available-item {
+            border-left: 5px solid #4ecdc4;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .book-info {
+            flex: 1;
+        }
+
+        .book-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .book-author {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .available {
+            background-color: #e8f5e9;
+            color: #2ecc71;
+        }
+
+        .unavailable {
+            background-color: #ffebee;
+            color: #ff6b6b;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-details-btn {
+            background-color: #f1f5f9;
+            color: #2c3e50;
+            border: 1px solid #d1d9e6;
+        }
+
+        .view-details-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .remove-btn {
+            background-color: #ffebee;
+            color: #ff6b6b;
+            border: 1px solid #ffcdd2;
+        }
+
+        .remove-btn:hover {
+            background-color: #ffcdd2;
+        }
+
+        .find-similar-btn {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .find-similar-btn:hover {
+            background-color: #bbdefb;
+        }
+
+        /* Select All Section */
+        .select-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .select-all {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .select-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .select-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .selected-count {
+            color: #666;
+            font-size: 14px;
+            margin-left: auto;
+        }
+
+        /* Borrow Button Section */
+        .borrow-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .borrow-btn {
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .borrow-btn:hover {
+            background-color: #3db8af;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.4);
+        }
+
+        .borrow-btn.disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .borrow-btn.disabled:hover {
+            transform: none;
+            background-color: #bdc3c7;
+        }
+
+        .selected-items-count {
+            background-color: white;
+            color: #4ecdc4;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        /* Empty Cart State */
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .empty-cart i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h3 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .browse-btn {
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .browse-btn:hover {
+            background-color: #3db8af;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+        }
+
+        .footer-content p {
+            margin: 5px 0;
+            color: #cbd5e1;
+        }
+
+        /* Modal for View Details */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 25px 30px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .close-modal:hover {
+            background-color: #f8f9fa;
+            color: #ff6b6b;
+        }
+
+        .modal-body {
+            padding: 20px 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .book-title {
+                font-size: 20px;
+            }
+            
+            .item-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .item-actions {
+                justify-content: flex-start;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-item {
+                padding: 20px;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .borrow-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 15px 20px;
+            }
+            
+            .cart-summary {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i> Lib'Row
+                </div>
+                <div class="header-actions">
+                    <button class="back-btn" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <div class="cart-icon-header">
+                        <i class="fas fa-shopping-cart" style="font-size: 24px; color: white;"></i>
+                        <span class="cart-count" id="headerCartCount">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-shopping-cart"></i> Your Cart
+            </h1>
+            
+            <div class="cart-summary">
+                <span class="item-count" id="cartItemCount">3 items</span>
+                <span style="color: #666;">Review your borrowing selections before checkout</span>
+            </div>
+            
+            <div class="search-section">
+                <input type="text" class="search-box" placeholder="Search in your cart...">
+            </div>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="cart-section">
+            <h2 class="cart-title">Cart Items</h2>
+            
+            <div class="cart-items">
+                <!-- Item 1: Available -->
+                <div class="cart-item available-item" data-available="true" data-selected="false">
+                    <div class="item-header">
+                        <div class="book-info">
+                            <h3 class="book-title">Pride and Prejudice</h3>
+                            <p class="book-author">Jane Austen</p>
+                            <span class="availability available">Available (4 copies)</span>
+                        </div>
+                        <div class="select-all">
+                            <input type="checkbox" class="select-checkbox" onchange="toggleSelectItem(this)">
+                            <span class="select-label">Select</span>
+                        </div>
+                    </div>
+                    
+                    <div class="item-actions">
+                        <button class="action-btn view-details-btn" onclick="viewBookDetails('Pride and Prejudice')">
+                            <i class="fas fa-info-circle"></i> View Details
+                        </button>
+                        <button class="action-btn remove-btn" onclick="removeItem('Pride and Prejudice')">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 2: Available -->
+                <div class="cart-item available-item" data-available="true" data-selected="false">
+                    <div class="item-header">
+                        <div class="book-info">
+                            <h3 class="book-title">The Girl with the Dragon Tattoo</h3>
+                            <p class="book-author">Stieg Larsson</p>
+                            <span class="availability available">Available (8 copies)</span>
+                        </div>
+                        <div class="select-all">
+                            <input type="checkbox" class="select-checkbox" onchange="toggleSelectItem(this)">
+                            <span class="select-label">Select</span>
+                        </div>
+                    </div>
+                    
+                    <div class="item-actions">
+                        <button class="action-btn view-details-btn" onclick="viewBookDetails('The Girl with the Dragon Tattoo')">
+                            <i class="fas fa-info-circle"></i> View Details
+                        </button>
+                        <button class="action-btn remove-btn" onclick="removeItem('The Girl with the Dragon Tattoo')">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 3: Unavailable -->
+                <div class="cart-item unavailable-item" data-available="false" data-selected="false">
+                    <div class="item-header">
+                        <div class="book-info">
+                            <h3 class="book-title">The Martian</h3>
+                            <p class="book-author">Andy Weir</p>
+                            <span class="availability unavailable">Currently Unavailable</span>
+                        </div>
+                        <div class="select-all">
+                            <input type="checkbox" class="select-checkbox" onchange="toggleSelectItem(this)" disabled>
+                            <span class="select-label" style="color: #999;">Select</span>
+                        </div>
+                    </div>
+                    
+                    <div class="item-actions">
+                        <button class="action-btn view-details-btn" onclick="viewBookDetails('The Martian')">
+                            <i class="fas fa-info-circle"></i> View Details
+                        </button>
+                        <button class="action-btn remove-btn" onclick="removeItem('The Martian')">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                        <button class="action-btn find-similar-btn" onclick="findSimilarBooks('The Martian')">
+                            <i class="fas fa-search"></i> Find Similar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Select All Section -->
+        <div class="select-section">
+            <div class="select-all" onclick="toggleSelectAll()">
+                <input type="checkbox" class="select-checkbox" id="selectAllCheckbox">
+                <span class="select-label">Select All Available Items</span>
+            </div>
+            <span class="selected-count" id="selectedCount">0 items selected</span>
+        </div>
+
+        <!-- Borrow Button -->
+        <div class="borrow-section">
+            <button class="borrow-btn disabled" id="borrowBtn" onclick="processBorrow()">
+                <i class="fas fa-book"></i> BORROW
+                <span class="selected-items-count" id="selectedItemsCount">(0)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>Lib'Row - Student Book Borrowing System</p>
+            <p>© 2024 All Rights Reserved | Your Cart</p>
+        </div>
+    </footer>
+
+    <!-- View Details Modal -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeDetailsModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalBookTitle">Book Details</h2>
+            </div>
+            <div class="modal-body">
+                <div id="modalBookContent">
+                    <!-- Book details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Cart data
+        let cartItems = [
+            {
+                title: "Pride and Prejudice",
+                author: "Jane Austen",
+                available: true,
+                copies: 4,
+                selected: false
+            },
+            {
+                title: "The Girl with the Dragon Tattoo",
+                author: "Stieg Larsson",
+                available: true,
+                copies: 8,
+                selected: false
+            },
+            {
+                title: "The Martian",
+                author: "Andy Weir",
+                available: false,
+                copies: 0,
+                selected: false
+            }
+        ];
+
+        // Navigation functions
+        function goBack() {
+            window.history.back();
+        }
+
+        function goToHome() {
+            window.location.href = "index.html";
+        }
+
+        // Update cart counts
+        function updateCartCounts() {
+            const totalItems = cartItems.length;
+            const selectedItems = cartItems.filter(item => item.selected).length;
+            
+            // Update header count
+            document.getElementById('headerCartCount').textContent = totalItems;
+            document.getElementById('cartItemCount').textContent = `${totalItems} items`;
+            
+            // Update selected count
+            document.getElementById('selectedCount').textContent = `${selectedItems} items selected`;
+            document.getElementById('selectedItemsCount').textContent = `(${selectedItems})`;
+            
+            // Update borrow button
+            const borrowBtn = document.getElementById('borrowBtn');
+            if (selectedItems > 0) {
+                borrowBtn.classList.remove('disabled');
+                borrowBtn.disabled = false;
+            } else {
+                borrowBtn.classList.add('disabled');
+                borrowBtn.disabled = true;
+            }
+        }
+
+        // Toggle select all
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const isChecked = !selectAllCheckbox.checked;
+            
+            selectAllCheckbox.checked = isChecked;
+            
+            // Update all available items
+            cartItems.forEach((item, index) => {
+                if (item.available) {
+                    item.selected = isChecked;
+                    const itemElement = document.querySelectorAll('.cart-item')[index];
+                    const checkbox = itemElement.querySelector('.select-checkbox');
+                    if (checkbox) {
+                        checkbox.checked = isChecked;
+                    }
+                    itemElement.setAttribute('data-selected', isChecked);
+                }
+            });
+            
+            updateCartCounts();
+        }
+
+        // Toggle individual item selection
+        function toggleSelectItem(checkbox) {
+            const itemElement = checkbox.closest('.cart-item');
+            const index = Array.from(document.querySelectorAll('.cart-item')).indexOf(itemElement);
+            
+            if (index !== -1 && cartItems[index].available) {
+                cartItems[index].selected = checkbox.checked;
+                itemElement.setAttribute('data-selected', checkbox.checked);
+                
+                // Update select all checkbox
+                const allAvailableSelected = cartItems.filter(item => item.available).every(item => item.selected);
+                const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+                selectAllCheckbox.checked = allAvailableSelected;
+            }
+            
+            updateCartCounts();
+        }
+
+        // Remove item from cart
+        function removeItem(bookTitle) {
+            if (confirm(`Remove "${bookTitle}" from your cart?`)) {
+                const index = cartItems.findIndex(item => item.title === bookTitle);
+                if (index !== -1) {
+                    cartItems.splice(index, 1);
+                    
+                    // Remove from DOM
+                    const itemElements = document.querySelectorAll('.cart-item');
+                    if (itemElements[index]) {
+                        itemElements[index].remove();
+                    }
+                    
+                    // Update counts
+                    updateCartCounts();
+                    
+                    // Show message if cart is empty
+                    if (cartItems.length === 0) {
+                        showEmptyCart();
+                    }
+                    
+                    alert(`"${bookTitle}" has been removed from your cart.`);
+                }
+            }
+        }
+
+        // Show empty cart state
+        function showEmptyCart() {
+            const cartSection = document.querySelector('.cart-section');
+            const selectSection = document.querySelector('.select-section');
+            const borrowSection = document.querySelector('.borrow-section');
+            
+            cartSection.innerHTML = `
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Browse our collection to find books to borrow</p>
+                    <button class="browse-btn" onclick="goToHome()">
+                        <i class="fas fa-book"></i> Browse Books
+                    </button>
+                </div>
+            `;
+            
+            selectSection.style.display = 'none';
+            borrowSection.style.display = 'none';
+        }
+
+        // View book details
+        function viewBookDetails(bookTitle) {
+            const book = cartItems.find(item => item.title === bookTitle);
+            if (!book) return;
+            
+            const modal = document.getElementById('detailsModal');
+            const titleElement = document.getElementById('modalBookTitle');
+            const contentElement = document.getElementById('modalBookContent');
+            
+            titleElement.textContent = book.title;
+            
+            // Book details content
+            let detailsHtml = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 5px;">${book.title}</h3>
+                    <p style="color: #666; font-style: italic; margin-bottom: 15px;">by ${book.author}</p>
+                </div>
+                
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Availability:</div>
+                    <div style="display: inline-block; padding: 6px 15px; border-radius: 20px; font-weight: 600; 
+                         background-color: ${book.available ? '#e8f5e9' : '#ffebee'}; 
+                         color: ${book.available ? '#2ecc71' : '#ff6b6b'};">
+                        ${book.available ? `Available (${book.copies} copies)` : 'Currently Unavailable'}
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px;">Book Description:</div>
+                    <div style="color: #555; line-height: 1.6;">
+            `;
+            
+            // Add description based on book
+            if (book.title === "Pride and Prejudice") {
+                detailsHtml += `A romantic novel of manners that depicts the emotional development of protagonist Elizabeth Bennet, who learns the error of making hasty judgments and comes to appreciate the difference between superficial goodness and actual goodness.`;
+            } else if (book.title === "The Girl with the Dragon Tattoo") {
+                detailsHtml += `A psychological thriller novel about a journalist and a hacker investigating a wealthy family's dark secrets. The story involves murder, corruption, and family intrigue set against the backdrop of Sweden's financial world.`;
+            } else if (book.title === "The Martian") {
+                detailsHtml += `A science fiction novel about an astronaut stranded on Mars and his struggle to survive using his ingenuity and scientific knowledge. The story follows his efforts to grow food, create water, and establish communication with Earth.`;
+            }
+            
+            detailsHtml += `
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                    <div style="background-color: #f1f5f9; padding: 12px; border-radius: 6px;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 3px;">Expected Return</div>
+                        <div style="font-weight: 600; color: #2c3e50;">2 weeks</div>
+                    </div>
+                    <div style="background-color: #f1f5f9; padding: 12px; border-radius: 6px;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 3px;">Max Borrow Period</div>
+                        <div style="font-weight: 600; color: #2c3e50;">30 days</div>
+                    </div>
+                </div>
+                
+                <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px;">
+                    <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px;">Note:</div>
+                    <div style="color: #555; font-size: 14px;">
+                        ${book.available 
+                            ? 'This book is available for immediate borrowing. You can pick it up from the library within 3 days of confirmation.' 
+                            : 'This book is currently checked out by another user. You can place a hold to be notified when it becomes available.'}
+                    </div>
+                </div>
+            `;
+            
+            contentElement.innerHTML = detailsHtml;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close details modal
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Find similar books
+        function findSimilarBooks(bookTitle) {
+            alert(`Finding books similar to "${bookTitle}"...\n\nThis would show you recommendations for similar books based on genre, author, and themes.\n\nSuggested similar books:\n• "Artemis" by Andy Weir\n• "Project Hail Mary" by Andy Weir\n• "The Andromeda Strain" by Michael Crichton\n• "Contact" by Carl Sagan`);
+        }
+
+        // Process borrow
+        function processBorrow() {
+            const selectedItems = cartItems.filter(item => item.selected);
+            
+            if (selectedItems.length === 0) {
+                alert("Please select at least one book to borrow.");
+                return;
+            }
+            
+            const unavailableItems = selectedItems.filter(item => !item.available);
+            if (unavailableItems.length > 0) {
+                alert("Some selected items are unavailable. Please deselect unavailable items before borrowing.");
+                return;
+            }
+            
+            const bookTitles = selectedItems.map(item => `• ${item.title}`).join('\n');
+            
+            if (confirm(`Borrow the following ${selectedItems.length} book(s)?\n\n${bookTitles}\n\nThis will reserve the books for you to pick up within 3 days.`)) {
+                // Remove selected items from cart
+                cartItems = cartItems.filter(item => !item.selected);
+                
+                // Update UI
+                document.querySelectorAll('.cart-item').forEach((item, index) => {
+                    if (item.getAttribute('data-selected') === 'true') {
+                        item.remove();
+                    }
+                });
+                
+                // Update counts
+                updateCartCounts();
+                
+                // Show success message
+                alert(`Successfully borrowed ${selectedItems.length} book(s)!\n\nPlease pick them up from the library within 3 days.\n\nYou can track your borrowings in the "Manage Borrows" section.`);
+                
+                // If cart is empty, show empty state
+                if (cartItems.length === 0) {
+                    showEmptyCart();
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('detailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDetailsModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDetailsModal();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCounts();
+            
+            // Add search functionality
+            const searchBox = document.querySelector('.search-box');
+            searchBox.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const items = document.querySelectorAll('.cart-item');
+                
+                items.forEach(item => {
+                    const title = item.querySelector('.book-title').textContent.toLowerCase();
+                    const author = item.querySelector('.book-author').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

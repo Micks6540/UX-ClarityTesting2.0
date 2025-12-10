@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management - Lib'Row</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #214d25);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            margin-right: 12px;
+            color: #4ecdc4;
+        }
+
+        .back-btn {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Page Title */
+        .page-title {
+            text-align: center;
+            margin: 40px 0 30px;
+            color: #2c3e50;
+        }
+
+        .page-title h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* Account Card */
+        .account-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        /* Profile Picture */
+        .profile-picture {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .profile-initials {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        /* User Info */
+        .user-info {
+            margin-bottom: 30px;
+        }
+
+        .user-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .user-id {
+            font-size: 18px;
+            color: #666;
+            background-color: #f8f9fa;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Edit Profile Button */
+        .edit-btn {
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px auto;
+            width: 250px;
+        }
+
+        .edit-btn:hover {
+            background-color: #3db8af;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        /* Account Details */
+        .account-details {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .details-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4ecdc4;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .detail-value {
+            color: #666;
+            text-align: right;
+        }
+
+        .edit-icon {
+            color: #4ecdc4;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: color 0.3s;
+        }
+
+        .edit-icon:hover {
+            color: #3db8af;
+        }
+
+        /* Back to Home Button */
+        .back-home-btn {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 40px auto 0;
+            width: 250px;
+        }
+
+        .back-home-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(44, 62, 80, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+        }
+
+        .footer-content p {
+            margin: 5px 0;
+            color: #cbd5e1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .account-card, .account-details {
+                padding: 30px 20px;
+            }
+            
+            .user-name {
+                font-size: 28px;
+            }
+            
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .profile-initials {
+                font-size: 40px;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .detail-value {
+                text-align: left;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .page-title h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .edit-btn, .back-home-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .user-name {
+                font-size: 24px;
+            }
+            
+            .user-id {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i> Lib'Row
+                </div>
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Account Management</h1>
+            <p>Manage your profile and account settings</p>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="account-card">
+            <div class="profile-picture">
+                <div class="profile-initials">RS</div>
+            </div>
+            
+            <div class="user-info">
+                <h2 class="user-name">Juan Dela Cruz</h2>
+                <div class="user-id">Student ID: 2221232</div>
+            </div>
+
+            <button class="edit-btn" onclick="editProfile()">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+        </div>
+
+        <!-- Account Details -->
+        <div class="account-details">
+            <h3 class="details-title">Account Details</h3>
+            
+            <div class="detail-row">
+                <span class="detail-label">Full Name</span>
+                <span class="detail-value">
+                    Juan Dela Cruz
+                    <i class="fas fa-edit edit-icon" onclick="editField('name')"></i>
+                </span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Student ID</span>
+                <span class="detail-value">2225072</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Email Address</span>
+                <span class="detail-value">
+                    juan.delacruz@student.edu
+                    <i class="fas fa-edit edit-icon" onclick="editField('email')"></i>
+                </span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Phone Number</span>
+                <span class="detail-value">
+                    +1 (555) 123-4567
+                    <i class="fas fa-edit edit-icon" onclick="editField('phone')"></i>
+                </span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Account Type</span>
+                <span class="detail-value">Student Account</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Member Since</span>
+                <span class="detail-value">September 2023</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Books Borrowed</span>
+                <span class="detail-value">24 books</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Currently Borrowing</span>
+                <span class="detail-value">3 books</span>
+            </div>
+        </div>
+
+        <!-- Back to Home Button -->
+        <button class="back-home-btn" onclick="goToHome()">
+            <i class="fas fa-home"></i> Back to Home
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>Lib'Row - Student Book Borrowing System</p>
+            <p>© 2024 All Rights Reserved | Account Management</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Navigation functions
+        function goBack() {
+            window.history.back();
+        }
+
+        function goToHome() {
+            window.location.href = "index.html";
+        }
+
+        // Edit profile function
+        function editProfile() {
+            alert("Edit Profile\n\nThis would open a form to edit:\n• Profile picture\n• Personal information\n• Contact details\n• Account settings");
+            
+            // In a real system, this would show an edit form
+            // For demo purposes, we'll simulate some changes
+            const confirmEdit = confirm("Do you want to update your profile picture?");
+            
+            if (confirmEdit) {
+                // Simulate changing initials
+                const initials = document.querySelector('.profile-initials');
+                const currentInitials = initials.textContent;
+                const newInitials = prompt("Enter new initials (2 letters):", currentInitials);
+                
+                if (newInitials && newInitials.length === 2) {
+                    initials.textContent = newInitials.toUpperCase();
+                    alert("Profile picture initials updated!");
+                }
+            }
+        }
+
+        // Edit specific field
+        function editField(fieldType) {
+            let fieldName, currentValue, newValue;
+            
+            switch(fieldType) {
+                case 'name':
+                    fieldName = "Full Name";
+                    currentValue = "Juan Dela Cruz";
+                    break;
+                case 'email':
+                    fieldName = "Email Address";
+                    currentValue = "juan.delacruz@student.edu";
+                    break;
+                case 'phone':
+                    fieldName = "Phone Number";
+                    currentValue = "+1 (555) 123-4567";
+                    break;
+            }
+            
+            newValue = prompt(`Enter new ${fieldName}:`, currentValue);
+            
+            if (newValue && newValue !== currentValue) {
+                // In a real system, this would update the database
+                // For demo, we'll just show a confirmation
+                alert(`${fieldName} updated successfully!\n\nNew value: ${newValue}\n\n(Changes saved in demo mode)`);
+                
+                // Update the displayed value
+                const detailRows = document.querySelectorAll('.detail-row');
+                detailRows.forEach(row => {
+                    const label = row.querySelector('.detail-label');
+                    if (label.textContent === fieldName) {
+                        const valueSpan = row.querySelector('.detail-value');
+                        // Remove the edit icon first
+                        const editIcon = valueSpan.querySelector('.edit-icon');
+                        valueSpan.innerHTML = newValue + ' ';
+                        valueSpan.appendChild(editIcon);
+                        
+                        // Also update the main name if it's the name field
+                        if (fieldType === 'name') {
+                            document.querySelector('.user-name').textContent = newValue;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some interactive effects
+            const profilePic = document.querySelector('.profile-picture');
+            
+            profilePic.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.transition = 'transform 0.3s';
+            });
+            
+            profilePic.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+            
+            // Add click effect to edit icons
+            document.querySelectorAll('.edit-icon').forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.2)';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
